@@ -1,0 +1,25 @@
+package job
+
+import (
+	"github.com/kkserver/kk-lib/app"
+)
+
+type JobVersionLogTaskResult struct {
+	app.Result
+}
+
+type JobVersionLogTask struct {
+	app.Task
+	JobId   int64  `json:"jobId"`
+	Version int    `json:"version"`
+	Log     string `json:"log,omitempty"`
+	Result  JobVersionLogTaskResult
+}
+
+func (task *JobVersionLogTask) API() string {
+	return "job/version/log"
+}
+
+func (task *JobVersionLogTask) GetResult() interface{} {
+	return &task.Result
+}

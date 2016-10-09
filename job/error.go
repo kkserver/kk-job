@@ -1,0 +1,9 @@
+package job
+
+const ERROR_JOB = 0x5000
+
+const ERROR_JOB_NOT_FOUND_ALIAS = ERROR_JOB + 1
+
+const ERROR_JOB_NOT_FOUND_ID = ERROR_JOB + 2
+
+const ERROR_JOB_NOT_FOUND = ERROR_JOB + 3
