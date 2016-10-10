@@ -6,7 +6,6 @@ import (
 
 type JobVersionCancelTaskResult struct {
 	app.Result
-	Job     *Job        `json:"job,omitempty"`
 	Version *JobVersion `json:"version,omitempty"`
 }
 

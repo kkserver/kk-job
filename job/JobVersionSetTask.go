@@ -18,6 +18,7 @@ type JobVersionSetTask struct {
 	Summary    string `json:"summary,omitempty"`
 	Options    string `json:"options,omitempty"`
 	StatusText string `json:"statusText,omitempty"`
+	Progress   int    `json:"progress,omitempty"` // 进度 0~100， -1 表示不修改
 	Result     JobVersionSetTaskResult
 }
 

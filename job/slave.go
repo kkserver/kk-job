@@ -1,14 +1,16 @@
 package job
 
 import (
+	"encoding/json"
 	"github.com/kkserver/kk-lib/kk"
 )
 
-const SlaveStatusNone = 0
-const SlaveStatusOnline = 200
-const SlaveStatusOffline = 300
+const JobSlaveStatusNone = 0
+const JobSlaveStatusOnline = 200
+const JobSlaveStatusOffline = 300
+const JobSlaveStatusTimeout = 500
 
-type Slave struct {
+type JobSlave struct {
 	Id      int64  `json:"id"`
 	Prefix  string `json:"prefix,omitempty"`
 	Title   string `json:"title,omitempty"`
@@ -20,7 +22,7 @@ type Slave struct {
 	Ctime   int64  `json:"ctime"` //创建时间
 }
 
-var SlaveTable = kk.DBTable{"slave",
+var JobSlaveTable = kk.DBTable{"job_slave",
 
 	"id",
 
@@ -34,3 +36,9 @@ var SlaveTable = kk.DBTable{"slave",
 		"ctime":   kk.DBField{0, kk.DBFieldTypeInt64}},
 
 	map[string]kk.DBIndex{"token": kk.DBIndex{"token", kk.DBIndexTypeAsc, true}}}
+
+func NewJobSlaveMessage(slave *JobSlave) kk.Message {
+	b, _ := json.Marshal(slave)
+	var v = kk.Message{"MESSAGE", "kk.message.job.slave.", "kk.message.", "text/json", b}
+	return v
+}

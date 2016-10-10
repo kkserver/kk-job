@@ -13,23 +13,26 @@ import (
 )
 
 func help() {
-	fmt.Println("kk-job <name> <0.0.0.0:87> <url> <prefix>")
+	fmt.Println("kk-job <name> <message> <0.0.0.0:87> <url> <prefix>")
 }
 
 func main() {
 
+	log.SetFlags(log.Llongfile | log.LstdFlags)
+
 	var args = os.Args
 	var name string = ""
 	var address string = ""
-
+	var message string = ""
 	var url string = ""
 	var prefix string = ""
 
-	if len(args) > 4 {
+	if len(args) > 5 {
 		name = args[1]
-		address = args[2]
-		url = args[3]
-		prefix = args[4]
+		message = args[2]
+		address = args[3]
+		url = args[4]
+		prefix = args[5]
 	} else {
 		help()
 		return
@@ -61,7 +64,7 @@ func main() {
 		return
 	}
 
-	var app = kkapp.New(job.New(nil, db, prefix))
+	var app = kkapp.New(job.New(nil, db, prefix, message, address))
 
 	{
 		var v = kkapp.KKConnectTask{}

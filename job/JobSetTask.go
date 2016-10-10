@@ -11,12 +11,11 @@ type JobSetTaskResult struct {
 
 type JobSetTask struct {
 	app.Task
-	Id         int64  `json:"id"`
-	Title      string `json:"title,omitempty"`
-	Summary    string `json:"summary,omitempty"`
-	Concurrent int    `json:"concurrent"` //并发数 0 为不限制 -1 不修改
-	Options    string `json:"options,omitempty"`
-	Result     JobSetTaskResult
+	Id      int64  `json:"id"`
+	Title   string `json:"title,omitempty"`
+	Summary string `json:"summary,omitempty"`
+	Options string `json:"options,omitempty"`
+	Result  JobSetTaskResult
 }
 
 func (task *JobSetTask) API() string {

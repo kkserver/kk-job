@@ -31,7 +31,6 @@ func (S *JobService) HandleJobCreateTask(a app.IApp, task *JobCreateTask) error 
 	v.Alias = task.Alias
 	v.Title = task.Title
 	v.Summary = task.Summary
-	v.Concurrent = task.Concurrent
 	v.Ctime = time.Now().Unix()
 	v.Options = task.Options
 	v.Mtime = v.Ctime
@@ -97,10 +96,6 @@ func (S *JobService) HandleJobSetTask(a app.IApp, task *JobSetTask) error {
 			v.Summary = task.Summary
 		}
 
-		if task.Concurrent != -1 {
-			v.Concurrent = task.Concurrent
-		}
-
 		v.Mtime = time.Now().Unix()
 
 		_, err = kk.DBUpdate(db, &JobTable, prefix, &v)
@@ -154,6 +149,52 @@ func (S *JobService) HandleJobRemoveTask(a app.IApp, task *JobRemoveTask) error 
 		task.Result.Errmsg = "未找到任务"
 		return nil
 	}
+
+	return nil
+}
+
+func (S *JobService) HandleJobTask(a app.IApp, task *JobTask) error {
+
+	var db = a.Get("db").(*sql.DB)
+	var prefix = a.Get("prefix").(string)
+
+	if task.Id == 0 {
+		task.Result.Errno = ERROR_JOB_NOT_FOUND_ID
+		task.Result.Errmsg = "未找到ID"
+		return nil
+	}
+
+	var v = Job{}
+
+	var scaner = kk.NewDBScaner(&v)
+
+	var rows, err = kk.DBQuery(db, &JobTable, prefix, " WHERE id=?", task.Id)
+
+	if err != nil {
+		task.Result.Errno = ERROR_JOB
+		task.Result.Errmsg = err.Error()
+		return nil
+	}
+
+	defer rows.Close()
+
+	if rows.Next() {
+
+		err = scaner.Scan(rows)
+
+		if err != nil {
+			task.Result.Errno = ERROR_JOB
+			task.Result.Errmsg = err.Error()
+			return nil
+		}
+
+	} else {
+		task.Result.Errno = ERROR_JOB_NOT_FOUND
+		task.Result.Errmsg = "未找到任务"
+		return nil
+	}
+
+	task.Result.Job = &v
 
 	return nil
 }
