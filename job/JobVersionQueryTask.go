@@ -14,7 +14,7 @@ type JobVersionQueryTask struct {
 	JobId      int64  `json:"jobId,string"`
 	MinVersion int    `json:"minVersion,string"` // 最小版本号
 	MaxVersion int    `json:"maxVersion,string"` // 最大版本号 -1 为不限制
-	Limit      int    `json:"maxVersion,string"`
+	Limit      int    `json:"limit,string"`
 	OrderBy    string `json:"orderBy"` // 排序方式 desc 降序默认  asc 升序
 	Result     JobVersionQueryTaskResult
 }
