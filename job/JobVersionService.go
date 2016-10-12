@@ -390,6 +390,10 @@ func (S *JobVersionService) HandleJobVersionQueryTask(a app.IApp, task *JobVersi
 		sql = sql + " ORDER BY version DESC"
 	}
 
+	sql = sql + " LIMIT ?"
+
+	args = append(args, task.Limit)
+
 	var v = JobVersion{}
 
 	var scaner = kk.NewDBScaner(&v)

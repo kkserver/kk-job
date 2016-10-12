@@ -11,7 +11,7 @@ const JobSlaveStatusOffline = 300
 const JobSlaveStatusTimeout = 500
 
 type JobSlave struct {
-	Id      int64  `json:"id"`
+	Id      int64  `json:"id,string"`
 	Prefix  string `json:"prefix,omitempty"`
 	Title   string `json:"title,omitempty"`
 	Token   string `json:"token,omitempty"`

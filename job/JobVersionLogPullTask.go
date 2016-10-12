@@ -11,10 +11,10 @@ type JobVersionLogPullTaskResult struct {
 
 type JobVersionLogPullTask struct {
 	app.Task
-	JobId    int64 `json:"jobId"`
-	Version  int   `json:"version"`
-	MinLogId int64 `json:"minLogId"` // 最小日志ID
-	Limit    int   `json:"limit"`    // 限制数量
+	JobId    int64 `json:"jobId,string"`
+	Version  int   `json:"version,string"`
+	MinLogId int64 `json:"minLogId,string"` // 最小日志ID
+	Limit    int   `json:"limit,string"`    // 限制数量
 	Result   JobVersionLogPullTaskResult
 }
 

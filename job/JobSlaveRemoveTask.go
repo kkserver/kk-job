@@ -10,7 +10,7 @@ type JobSlaveRemoveTaskResult struct {
 
 type JobSlaveRemoveTask struct {
 	app.Task
-	Id     int64 `json:"id"`
+	Id     int64 `json:"id,string"`
 	Result JobSlaveRemoveTaskResult
 }
 

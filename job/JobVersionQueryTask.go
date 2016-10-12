@@ -11,10 +11,11 @@ type JobVersionQueryTaskResult struct {
 
 type JobVersionQueryTask struct {
 	app.Task
-	JobId      int64  `json:"jobId"`
-	MinVersion int    `json:"minVersion"` // 最小版本号
-	MaxVersion int    `json:"maxVersion"` // 最大版本号 -1 为不限制
-	OrderBy    string `json:"orderBy"`    // 排序方式 desc 降序默认  asc 升序
+	JobId      int64  `json:"jobId,string"`
+	MinVersion int    `json:"minVersion,string"` // 最小版本号
+	MaxVersion int    `json:"maxVersion,string"` // 最大版本号 -1 为不限制
+	Limit      int    `json:"maxVersion,string"`
+	OrderBy    string `json:"orderBy"` // 排序方式 desc 降序默认  asc 升序
 	Result     JobVersionQueryTaskResult
 }
 

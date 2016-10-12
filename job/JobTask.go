@@ -11,7 +11,7 @@ type JobTaskResult struct {
 
 type JobTask struct {
 	app.Task
-	Id     int64 `json:"id"`
+	Id     int64 `json:"id,string,omitempty"`
 	Result JobTaskResult
 }
 

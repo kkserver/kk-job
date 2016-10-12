@@ -12,7 +12,7 @@ type JobVersionCreateTaskResult struct {
 
 type JobVersionCreateTask struct {
 	app.Task
-	JobId   int64  `json:"jobId"`
+	JobId   int64  `json:"jobId,string"`
 	Title   string `json:"title,omitempty"`
 	Options string `json:"options,omitempty"`
 	Result  JobVersionCreateTaskResult

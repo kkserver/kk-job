@@ -11,7 +11,7 @@ const JobStatusOK = 200
 const JobStatusCancel = 400
 
 type Job struct {
-	Id      int64  `json:"id"`
+	Id      int64  `json:"id,string"`
 	Alias   string `json:"alias,omitempty"`
 	Title   string `json:"title,omitempty"`
 	Summary string `json:"summary,omitempty"`
@@ -36,9 +36,9 @@ var JobTable = kk.DBTable{"job",
 	map[string]kk.DBIndex{"alias": kk.DBIndex{"alias", kk.DBIndexTypeAsc, false}}}
 
 type JobVersion struct {
-	Id         int64  `json:"id"`
-	JobId      int64  `json:"jobId"`
-	SlaveId    int64  `json:"slaveId"`
+	Id         int64  `json:"id,string"`
+	JobId      int64  `json:"jobId,string"`
+	SlaveId    int64  `json:"slaveId,string"`
 	Alias      string `json:"alias,omitempty"`
 	Title      string `json:"title,omitempty"`
 	Summary    string `json:"summary,omitempty"`
@@ -73,8 +73,8 @@ var JobVersionTable = kk.DBTable{"job_version",
 		"alias":   kk.DBIndex{"alias", kk.DBIndexTypeAsc, false}}}
 
 type JobVersionLog struct {
-	Id      int64  `json:"id"`
-	JobId   int64  `json:"jobId"`
+	Id      int64  `json:"id,string"`
+	JobId   int64  `json:"jobId,string"`
 	Version int    `json:"version"`
 	Log     string `json:"log"`
 	Ctime   int64  `json:"ctime"` //创建时间

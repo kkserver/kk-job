@@ -11,7 +11,7 @@ type JobSetTaskResult struct {
 
 type JobSetTask struct {
 	app.Task
-	Id      int64  `json:"id"`
+	Id      int64  `json:"id,string"`
 	Title   string `json:"title,omitempty"`
 	Summary string `json:"summary,omitempty"`
 	Options string `json:"options,omitempty"`
