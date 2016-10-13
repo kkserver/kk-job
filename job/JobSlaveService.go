@@ -169,6 +169,52 @@ func (S *JobSlaveService) HandleJobSlaveTask(a app.IApp, task *JobSlaveTask) err
 	var db = a.Get("db").(*sql.DB)
 	var prefix = a.Get("prefix").(string)
 
+	if task.Id == 0 {
+		task.Result.Errno = ERROR_JOB_NOT_FOUND_ID
+		task.Result.Errmsg = "未找到ID"
+		return nil
+	}
+
+	var v = JobSlave{}
+
+	var scaner = kk.NewDBScaner(&v)
+
+	var rows, err = kk.DBQuery(db, &JobSlaveTable, prefix, " WHERE id=?", task.Id)
+
+	if err != nil {
+		task.Result.Errno = ERROR_JOB
+		task.Result.Errmsg = err.Error()
+		return nil
+	}
+
+	defer rows.Close()
+
+	if rows.Next() {
+
+		err = scaner.Scan(rows)
+
+		if err != nil {
+			task.Result.Errno = ERROR_JOB
+			task.Result.Errmsg = err.Error()
+			return nil
+		}
+
+	} else {
+		task.Result.Errno = ERROR_JOB_NOT_FOUND_SLAVE
+		task.Result.Errmsg = "未找到任务处理器"
+		return nil
+	}
+
+	task.Result.Slave = &v
+
+	return nil
+}
+
+func (S *JobSlaveService) HandleJobSlaveLoginTask(a app.IApp, task *JobSlaveLoginTask) error {
+
+	var db = a.Get("db").(*sql.DB)
+	var prefix = a.Get("prefix").(string)
+
 	if task.Token == "" {
 		task.Result.Errno = ERROR_JOB_NOT_FOUND_TOKEN
 		task.Result.Errmsg = "未找到 Token"
@@ -199,14 +245,21 @@ func (S *JobSlaveService) HandleJobSlaveTask(a app.IApp, task *JobSlaveTask) err
 			return nil
 		}
 
+		v.Status = JobSlaveStatusOnline
 		v.Atime = time.Now().Unix()
 
-		_, err = kk.DBUpdateWithKeys(db, &JobSlaveTable, prefix, &v, map[string]bool{"atime": true})
+		_, err = kk.DBUpdateWithKeys(db, &JobSlaveTable, prefix, &v, map[string]bool{"atime": true, "status": true})
 
 		if err != nil {
 			task.Result.Errno = ERROR_JOB
 			task.Result.Errmsg = err.Error()
 			return nil
+		}
+
+		{
+			var m = kkapp.KKSendMessageTask{}
+			m.Message = NewJobSlaveLoginMessage(&v)
+			a.Handle(&m)
 		}
 
 	} else {
@@ -359,7 +412,7 @@ func (S *JobSlaveService) HandleJobSlaveCleanupTask(a app.IApp, task *JobSlaveCl
 
 			var scaner = kk.NewDBScaner(&v)
 
-			rows, err := kk.DBQuery(db, &JobSlaveTable, prefix, " WHERE status=? AND atime + 120 < ?", JobSlaveStatusOnline, time.Now().Unix())
+			rows, err := kk.DBQuery(db, &JobSlaveTable, prefix, " WHERE status=? AND atime + 60 < ?", JobSlaveStatusOnline, time.Now().Unix())
 
 			if err == nil {
 
@@ -583,6 +636,133 @@ func (S *JobSlaveService) HandleJobSlaveAuthTask(a app.IApp, task *JobSlaveAuthT
 	return nil
 }
 
+func (S *JobSlaveService) HandleJobSlaveLogTask(a app.IApp, task *JobSlaveLogTask) error {
+
+	var auth = JobSlaveAuthTask{}
+
+	auth.Token = task.Token
+	auth.JobId = task.JobId
+	auth.Version = task.Version
+
+	var err = a.Handle(&auth)
+
+	if err != nil {
+		return err
+	}
+
+	if auth.Result.Errno != 0 {
+		task.Result.Errno = auth.Result.Errno
+		task.Result.Errmsg = auth.Result.Errmsg
+		return nil
+	}
+
+	var v = JobVersionLogTask{}
+
+	v.JobId = task.JobId
+	v.Version = task.Version
+	v.Log = task.Log
+
+	err = a.Handle(&v)
+
+	if err != nil {
+		return err
+	}
+
+	if v.Result.Errno != 0 {
+		task.Result.Errno = v.Result.Errno
+		task.Result.Errmsg = v.Result.Errmsg
+		return nil
+	}
+
+	return nil
+}
+
+func (S *JobSlaveService) HandleJobSlaveOKTask(a app.IApp, task *JobSlaveOKTask) error {
+
+	var auth = JobSlaveAuthTask{}
+
+	auth.Token = task.Token
+	auth.JobId = task.JobId
+	auth.Version = task.Version
+
+	var err = a.Handle(&auth)
+
+	if err != nil {
+		return err
+	}
+
+	if auth.Result.Errno != 0 {
+		task.Result.Errno = auth.Result.Errno
+		task.Result.Errmsg = auth.Result.Errmsg
+		return nil
+	}
+
+	var v = JobVersionOKTask{}
+
+	v.JobId = task.JobId
+	v.Version = task.Version
+
+	err = a.Handle(&v)
+
+	if err != nil {
+		return err
+	}
+
+	if v.Result.Errno != 0 {
+		task.Result.Errno = v.Result.Errno
+		task.Result.Errmsg = v.Result.Errmsg
+		return nil
+	}
+
+	task.Result.Job = v.Result.Job
+	task.Result.Version = v.Result.Version
+
+	return nil
+}
+
+func (S *JobSlaveService) HandleJobSlaveFailTask(a app.IApp, task *JobSlaveFailTask) error {
+
+	var auth = JobSlaveAuthTask{}
+
+	auth.Token = task.Token
+	auth.JobId = task.JobId
+	auth.Version = task.Version
+
+	var err = a.Handle(&auth)
+
+	if err != nil {
+		return err
+	}
+
+	if auth.Result.Errno != 0 {
+		task.Result.Errno = auth.Result.Errno
+		task.Result.Errmsg = auth.Result.Errmsg
+		return nil
+	}
+
+	var v = JobVersionFailTask{}
+
+	v.JobId = task.JobId
+	v.Version = task.Version
+
+	err = a.Handle(&v)
+
+	if err != nil {
+		return err
+	}
+
+	if v.Result.Errno != 0 {
+		task.Result.Errno = v.Result.Errno
+		task.Result.Errmsg = v.Result.Errmsg
+		return nil
+	}
+
+	task.Result.Job = v.Result.Job
+	task.Result.Version = v.Result.Version
+
+	return nil
+}
+
 func (S *JobSlaveService) onMessage(a app.IApp, message *kk.Message) error {
 
 	log.Println("JobSlaveService onMessage ", message.String())
@@ -602,10 +782,33 @@ func (S *JobSlaveService) onMessage(a app.IApp, message *kk.Message) error {
 				_, err = db.Exec(fmt.Sprintf("UPDATE %s%s SET status=? WHERE status=? AND slaveid=?", prefix, JobVersionTable.Name), JobStatusFail, JobStatusProgress, v.Id)
 
 				if err != nil {
-					log.Println("MESSAGE.JOB.SLAVE FAIL : ", err.Error())
+					log.Println("MESSAGE.JOB.SLAVE. FAIL : ", err.Error())
+					log.Println(v)
 				} else {
-					log.Println("MESSAGE.JOB.SLAVE OK")
+					log.Println("MESSAGE.JOB.SLAVE. OK")
+					log.Println(v)
 				}
+			}
+
+		}
+	} else if message.Method == "MESSAGE" && message.From == "kk.message.job.slave.login." {
+
+		var v = JobSlave{}
+		var err = json.Unmarshal(message.Content, &v)
+
+		if err == nil {
+
+			var db = a.Get("db").(*sql.DB)
+			var prefix = a.Get("prefix").(string)
+
+			_, err = db.Exec(fmt.Sprintf("UPDATE %s%s SET status=? WHERE status=? AND slaveid=?", prefix, JobVersionTable.Name), JobStatusFail, JobStatusProgress, v.Id)
+
+			if err != nil {
+				log.Println("MESSAGE.JOB.SLAVE.LOGIN. FAIL : ", err.Error())
+				log.Println(v)
+			} else {
+				log.Println("MESSAGE.JOB.SLAVE.LOGIN. OK")
+				log.Println(v)
 			}
 
 		}

@@ -26,7 +26,8 @@ func New(parent app.IApp, db *sql.DB, prefix string, message string, address str
 	v.Service(&JobVersionService{})(&JobVersionCreateTask{}, &JobVersionCancelTask{}, &JobVersionOKTask{}, &JobVersionFailTask{}, &JobVersionTask{}, &JobVersionSetTask{}, &JobVersionQueryTask{})
 	v.Service(&JobVersionLogService{})(&JobVersionLogTask{}, &JobVersionLogPullTask{})
 	v.Service(&JobSlaveService{})(&JobSlaveCreateTask{}, &JobSlaveSetTask{}, &JobSlaveTask{}, &JobSlaveRemoveTask{},
-		&JobSlaveOnlineTask{}, &JobSlaveOfflineTask{}, &JobSlaveProcessTask{}, &JobSlaveCleanupTask{}, &JobSlaveAuthTask{},
+		&JobSlaveLoginTask{}, &JobSlaveOnlineTask{}, &JobSlaveOfflineTask{}, &JobSlaveProcessTask{}, &JobSlaveCleanupTask{}, &JobSlaveAuthTask{},
+		&JobSlaveLogTask{}, &JobSlaveOKTask{}, &JobSlaveFailTask{},
 		&kkapp.KKReciveMessageTask{}, &kkapp.KKSendMessageTask{})
 
 	v.Handle(&JobSlaveCleanupTask{})

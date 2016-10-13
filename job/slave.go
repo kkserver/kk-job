@@ -42,3 +42,9 @@ func NewJobSlaveMessage(slave *JobSlave) kk.Message {
 	var v = kk.Message{"MESSAGE", "kk.message.job.slave.", "kk.message.", "text/json", b}
 	return v
 }
+
+func NewJobSlaveLoginMessage(slave *JobSlave) kk.Message {
+	b, _ := json.Marshal(slave)
+	var v = kk.Message{"MESSAGE", "kk.message.job.slave.login.", "kk.message.", "text/json", b}
+	return v
+}

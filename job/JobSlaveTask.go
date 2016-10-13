@@ -11,7 +11,7 @@ type JobSlaveTaskResult struct {
 
 type JobSlaveTask struct {
 	app.Task
-	Token  string `json:"token"`
+	Id     int64 `json:"id,string"`
 	Result JobSlaveTaskResult
 }
 
