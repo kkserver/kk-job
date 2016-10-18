@@ -76,6 +76,7 @@ type JobVersionLog struct {
 	Id      int64  `json:"id,string"`
 	JobId   int64  `json:"jobId,string"`
 	Version int    `json:"version"`
+	Tag     string `json:"tag"`
 	Log     string `json:"log"`
 	Ctime   int64  `json:"ctime"` //创建时间
 }
@@ -86,6 +87,7 @@ var JobVersionLogTable = kk.DBTable{"job_version_log",
 
 	map[string]kk.DBField{"jobid": kk.DBField{0, kk.DBFieldTypeInt64},
 		"version": kk.DBField{0, kk.DBFieldTypeInt},
+		"tag":     kk.DBField{64, kk.DBFieldTypeString},
 		"log":     kk.DBField{0, kk.DBFieldTypeText},
 		"ctime":   kk.DBField{0, kk.DBFieldTypeInt64}},
 
