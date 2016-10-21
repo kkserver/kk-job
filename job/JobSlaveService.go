@@ -661,6 +661,7 @@ func (S *JobSlaveService) HandleJobSlaveLogTask(a app.IApp, task *JobSlaveLogTas
 	v.JobId = task.JobId
 	v.Version = task.Version
 	v.Log = task.Log
+	v.Tag = task.Tag
 
 	err = a.Handle(&v)
 

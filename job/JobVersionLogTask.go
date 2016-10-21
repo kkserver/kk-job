@@ -12,6 +12,7 @@ type JobVersionLogTask struct {
 	app.Task
 	JobId   int64  `json:"jobId,string"`
 	Version int    `json:"version,string"`
+	Tag     string `json:"tag,omitempty"`
 	Log     string `json:"log,omitempty"`
 	Result  JobVersionLogTaskResult
 }
