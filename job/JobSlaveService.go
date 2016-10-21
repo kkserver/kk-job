@@ -26,7 +26,7 @@ func (S *JobSlaveService) Handle(a app.IApp, task app.ITask) error {
 func NewToken() string {
 	rand.Seed(time.Now().UnixNano())
 	var v = md5.New()
-	v.Write([]byte(fmt.Sprintf("%lld.%lld.$%^&*(IUGFE#$%^&*OKGFE$%^å.%lld", time.Now().UnixNano(), rand.Int63(), kk.UUID())))
+	v.Write([]byte(fmt.Sprintf("%lld.%lld.$%^&*(IUGFE#$%^&*OKGFE$%^å.%lld", time.Now().UnixNano(), rand.Int63(), rand.Int63())))
 	return hex.EncodeToString(v.Sum(nil))
 }
 
