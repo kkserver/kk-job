@@ -51,6 +51,7 @@ func (S *JobVersionLogService) HandleJobVersionLogTask(a app.IApp, task *JobVers
 	v.JobId = task.JobId
 	v.Version = task.Version
 	v.Log = task.Log
+	v.Tag = task.Tag
 	v.Ctime = time.Now().Unix()
 
 	_, err = kk.DBInsert(db, &JobVersionLogTable, prefix, &v)
