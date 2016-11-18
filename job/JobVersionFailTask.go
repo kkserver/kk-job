@@ -13,7 +13,7 @@ type JobVersionFailTaskResult struct {
 type JobVersionFailTask struct {
 	app.Task
 	JobId      int64  `json:"jobId,string"`
-	Version    int    `json:"version,string"`
+	Version    int    `json:"version"`
 	StatusText string `json:"statusText,omitempty"`
 	Result     JobVersionFailTaskResult
 }
