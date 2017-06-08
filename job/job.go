@@ -25,15 +25,17 @@ var JobTable = kk.DBTable{"job",
 
 	"id",
 
-	map[string]kk.DBField{"alias": kk.DBField{64, kk.DBFieldTypeString},
-		"title":   kk.DBField{255, kk.DBFieldTypeString},
-		"summary": kk.DBField{512, kk.DBFieldTypeString},
-		"version": kk.DBField{0, kk.DBFieldTypeInt},
-		"options": kk.DBField{0, kk.DBFieldTypeText},
-		"mtime":   kk.DBField{0, kk.DBFieldTypeInt64},
-		"ctime":   kk.DBField{0, kk.DBFieldTypeInt64}},
+	1,
 
-	map[string]kk.DBIndex{"alias": kk.DBIndex{"alias", kk.DBIndexTypeAsc, false}}}
+	map[string]*kk.DBField{"alias": &kk.DBField{64, kk.DBFieldTypeString},
+		"title":   &kk.DBField{255, kk.DBFieldTypeString},
+		"summary": &kk.DBField{512, kk.DBFieldTypeString},
+		"version": &kk.DBField{0, kk.DBFieldTypeInt},
+		"options": &kk.DBField{0, kk.DBFieldTypeText},
+		"mtime":   &kk.DBField{0, kk.DBFieldTypeInt64},
+		"ctime":   &kk.DBField{0, kk.DBFieldTypeInt64}},
+
+	map[string]*kk.DBIndex{"alias": &kk.DBIndex{"alias", kk.DBIndexTypeAsc, false}}}
 
 type JobVersion struct {
 	Id         int64  `json:"id,string"`
@@ -55,22 +57,24 @@ var JobVersionTable = kk.DBTable{"job_version",
 
 	"id",
 
-	map[string]kk.DBField{"jobid": kk.DBField{0, kk.DBFieldTypeInt64},
-		"slaveid":    kk.DBField{0, kk.DBFieldTypeInt64},
-		"alias":      kk.DBField{64, kk.DBFieldTypeString},
-		"title":      kk.DBField{255, kk.DBFieldTypeString},
-		"summary":    kk.DBField{0, kk.DBFieldTypeText},
-		"status":     kk.DBField{0, kk.DBFieldTypeInt},
-		"statustext": kk.DBField{255, kk.DBFieldTypeString},
-		"progress":   kk.DBField{0, kk.DBFieldTypeInt},
-		"version":    kk.DBField{0, kk.DBFieldTypeInt},
-		"options":    kk.DBField{0, kk.DBFieldTypeText},
-		"mtime":      kk.DBField{0, kk.DBFieldTypeInt64},
-		"ctime":      kk.DBField{0, kk.DBFieldTypeInt64}},
+	1,
 
-	map[string]kk.DBIndex{"jobid": kk.DBIndex{"jobid", kk.DBIndexTypeAsc, false},
-		"version": kk.DBIndex{"version", kk.DBIndexTypeDesc, false},
-		"alias":   kk.DBIndex{"alias", kk.DBIndexTypeAsc, false}}}
+	map[string]*kk.DBField{"jobid": &kk.DBField{0, kk.DBFieldTypeInt64},
+		"slaveid":    &kk.DBField{0, kk.DBFieldTypeInt64},
+		"alias":      &kk.DBField{64, kk.DBFieldTypeString},
+		"title":      &kk.DBField{255, kk.DBFieldTypeString},
+		"summary":    &kk.DBField{0, kk.DBFieldTypeText},
+		"status":     &kk.DBField{0, kk.DBFieldTypeInt},
+		"statustext": &kk.DBField{255, kk.DBFieldTypeString},
+		"progress":   &kk.DBField{0, kk.DBFieldTypeInt},
+		"version":    &kk.DBField{0, kk.DBFieldTypeInt},
+		"options":    &kk.DBField{0, kk.DBFieldTypeText},
+		"mtime":      &kk.DBField{0, kk.DBFieldTypeInt64},
+		"ctime":      &kk.DBField{0, kk.DBFieldTypeInt64}},
+
+	map[string]*kk.DBIndex{"jobid": &kk.DBIndex{"jobid", kk.DBIndexTypeAsc, false},
+		"version": &kk.DBIndex{"version", kk.DBIndexTypeDesc, false},
+		"alias":   &kk.DBIndex{"alias", kk.DBIndexTypeAsc, false}}}
 
 type JobVersionLog struct {
 	Id      int64  `json:"id,string"`
@@ -85,11 +89,13 @@ var JobVersionLogTable = kk.DBTable{"job_version_log",
 
 	"id",
 
-	map[string]kk.DBField{"jobid": kk.DBField{0, kk.DBFieldTypeInt64},
-		"version": kk.DBField{0, kk.DBFieldTypeInt},
-		"tag":     kk.DBField{64, kk.DBFieldTypeString},
-		"log":     kk.DBField{0, kk.DBFieldTypeText},
-		"ctime":   kk.DBField{0, kk.DBFieldTypeInt64}},
+	1,
 
-	map[string]kk.DBIndex{"jobid": kk.DBIndex{"jobid", kk.DBIndexTypeAsc, false},
-		"version": kk.DBIndex{"version", kk.DBIndexTypeDesc, false}}}
+	map[string]*kk.DBField{"jobid": &kk.DBField{0, kk.DBFieldTypeInt64},
+		"version": &kk.DBField{0, kk.DBFieldTypeInt},
+		"tag":     &kk.DBField{64, kk.DBFieldTypeString},
+		"log":     &kk.DBField{0, kk.DBFieldTypeText},
+		"ctime":   &kk.DBField{0, kk.DBFieldTypeInt64}},
+
+	map[string]*kk.DBIndex{"jobid": &kk.DBIndex{"jobid", kk.DBIndexTypeAsc, false},
+		"version": &kk.DBIndex{"version", kk.DBIndexTypeDesc, false}}}

@@ -15,10 +15,10 @@ func New(parent app.IApp, db *sql.DB, prefix string, message string, address str
 	v.Set("db", db)
 	v.Set("prefix", prefix)
 
-	kk.DBBuild(db, &JobTable, prefix, 1)
-	kk.DBBuild(db, &JobVersionTable, prefix, 1)
-	kk.DBBuild(db, &JobVersionLogTable, prefix, 1)
-	kk.DBBuild(db, &JobSlaveTable, prefix, 1)
+	kk.DBBuild(db, &JobTable, prefix)
+	kk.DBBuild(db, &JobVersionTable, prefix)
+	kk.DBBuild(db, &JobVersionLogTable, prefix)
+	kk.DBBuild(db, &JobSlaveTable, prefix)
 
 	v.Service(&kkapp.KKService{})(&kkapp.KKConnectTask{}, &kkapp.KKDisconnectTask{}, &kkapp.KKSendMessageTask{}, &kkapp.KKReciveMessageTask{})
 

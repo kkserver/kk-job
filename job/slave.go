@@ -25,17 +25,18 @@ type JobSlave struct {
 var JobSlaveTable = kk.DBTable{"job_slave",
 
 	"id",
+	1,
 
-	map[string]kk.DBField{"prefix": kk.DBField{64, kk.DBFieldTypeString},
-		"title":   kk.DBField{255, kk.DBFieldTypeString},
-		"token":   kk.DBField{32, kk.DBFieldTypeString},
-		"status":  kk.DBField{0, kk.DBFieldTypeInt},
-		"options": kk.DBField{0, kk.DBFieldTypeText},
-		"mtime":   kk.DBField{0, kk.DBFieldTypeInt64},
-		"atime":   kk.DBField{0, kk.DBFieldTypeInt64},
-		"ctime":   kk.DBField{0, kk.DBFieldTypeInt64}},
+	map[string]*kk.DBField{"prefix": &kk.DBField{64, kk.DBFieldTypeString},
+		"title":   &kk.DBField{255, kk.DBFieldTypeString},
+		"token":   &kk.DBField{32, kk.DBFieldTypeString},
+		"status":  &kk.DBField{0, kk.DBFieldTypeInt},
+		"options": &kk.DBField{0, kk.DBFieldTypeText},
+		"mtime":   &kk.DBField{0, kk.DBFieldTypeInt64},
+		"atime":   &kk.DBField{0, kk.DBFieldTypeInt64},
+		"ctime":   &kk.DBField{0, kk.DBFieldTypeInt64}},
 
-	map[string]kk.DBIndex{"token": kk.DBIndex{"token", kk.DBIndexTypeAsc, true}}}
+	map[string]*kk.DBIndex{"token": &kk.DBIndex{"token", kk.DBIndexTypeAsc, true}}}
 
 func NewJobSlaveMessage(slave *JobSlave) kk.Message {
 	b, _ := json.Marshal(slave)
